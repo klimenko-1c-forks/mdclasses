@@ -37,8 +37,8 @@ import java.util.regex.Pattern;
 public class ParseSupportData {
 
   // взято из https://stackoverflow.com/questions/18144431/regex-to-split-a-csv
-  private static final String REGEX = "(?:,|\\n|^)(\"(?:(?:\"\")*[^\"]*)*\"|[^\",\\n]*|(?:\\n|$))";
-  private static final Pattern patternSplit = Pattern.compile(REGEX);
+  private static final String defaultRegex = "(?:,|\\n|^)(\"(?:(?:\"\")*[^\"]*)*\"|[^\",\\n]*|(?:\\n|$))";
+  private static final Pattern defaultPatternSplit = Pattern.compile(defaultRegex);
 
   private static final int POINT_COUNT_CONFIGURATION = 2;
   private static final int SHIFT_CONFIGURATION_VERSION = 3;
@@ -51,14 +51,21 @@ public class ParseSupportData {
   private Path pathToBinFile;
   private Map<String, Map<SupportConfiguration, SupportVariant>> supportMap = new HashMap<>();
 
-  public ParseSupportData(Path pathToBinFile) {
+  private Pattern patternSplit;
+
+  public ParseSupportData(Path pathToBinFile, String customRegex) {
     this.pathToBinFile = pathToBinFile;
+    patternSplit = customRegex.isEmpty()? defaultPatternSplit : Pattern.compile(customRegex);
     LOGGER.debug("Чтения файла поставки ParentConfigurations.bin");
     try {
       read();
     } catch (FileNotFoundException e) {
       LOGGER.error("При чтении файла ParentConfigurations.bin произошла ошибка", e);
     }
+  }
+
+  public ParseSupportData(Path pathToBinFile) {
+    this(pathToBinFile, "");
   }
 
   private void read() throws FileNotFoundException {
