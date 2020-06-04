@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 public class ParseSupportData {
 
   // взято из https://stackoverflow.com/questions/18144431/regex-to-split-a-csv
-  private static final String defaultRegex = "(?:,|\\n|^)(\"(?:(?:\"\")*[^\"]*)*\"|[^\",\\n]*|(?:\\n|$))";
+  private static final String defaultRegex = "(?:,|\\n|^)[\\n\\r]*(\"(?:(?:\"\")*[^\"]*)*\"|[^\",\\n]*|(?:\\n|$))";
   private static final Pattern defaultPatternSplit = Pattern.compile(defaultRegex);
 
   private static final int POINT_COUNT_CONFIGURATION = 2;
